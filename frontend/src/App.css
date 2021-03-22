@@ -1,0 +1,103 @@
+.App {
+    text-align: center;
+}
+
+.App-logo {
+    height: 40vmin;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.binList {
+    padding: 0px
+}
+
+.bin {
+    height: 220px;
+    width: 150px;
+    float: left;
+}
+
+img {
+    border: 0 none;
+    display: inline-block;
+    height: auto;
+    max-width: 100%;
+    vertical-align: text-bottom;
+    padding: 10px;
+}
+
+figure {
+    height: inherit;
+    display: inline-block;
+    position: relative;
+}
+
+figcaption {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    right: 0
+}
+
+.rotate {
+    animation: rotation 2s infinite linear;
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+li {
+    list-style-type: none;
+    text-align: center;
+}
+
+h1 a{
+    color: #00db00
+}
+
+h2, h3, h4 {
+    color: #00db00
+}
+
+a, label, figcaption, span {
+    color: #333333
+}
