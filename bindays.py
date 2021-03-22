@@ -47,7 +47,7 @@ def main(scrapestreetlinks=None, scrapepdflinks=None, download=None, parse=None)
             bindict['city'] = 'Edinburgh'.lower()
             bindicts[idx] = bindict
         print('upserting {} records'.format(len(bindicts)))
-        bulk_upsert(db_connection(), 'bindays', 'days', bindicts)
+        bulk_upsert(db_connection(), 'frontend', 'days', bindicts)
 
 
 def colour_difference(colour1, colour2):

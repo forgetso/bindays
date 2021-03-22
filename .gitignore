@@ -1,4 +1,4 @@
-# Compiled source #
+ Compiled source #
 ###################
 *.com
 *.class
@@ -86,3 +86,8 @@ frontend/.idea/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/pdfs/
+/img/
+*.csv
+*.xcf
+.ipynb_checkpoints
