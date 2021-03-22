@@ -1,8 +1,5 @@
 requests
 bs4
-pd2image
-pdf2image
-pdf2image
 pillow
 pandas
 flask
