@@ -3,7 +3,7 @@ from flask_restful import reqparse, Api, Resource
 from flask_cors import CORS
 import json
 import pandas as pd
-from backend.db import db_connection, search_streets, get_days, streets_paged
+from db import db_connection, search_streets, get_days, streets_paged
 from datetime import date, datetime
 
 app = Flask(__name__)

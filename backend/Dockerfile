@@ -10,14 +10,7 @@ WORKDIR $WORKDIR
 RUN whoami
 RUN useradd -ms /bin/bash $USER
 RUN chown -R $USER:$USER /home/$USER
-
-
-#RUN mkdir /opt/conda/envs/$USER /opt/conda/pkgs && \
-#    chgrp $USER /opt/conda/pkgs && \
-#    chmod g+w /opt/conda/pkgs && \
-#    touch /opt/conda/pkgs/urls.txt && \
-#    chown cq /opt/conda/envs/$USER /opt/conda/pkgs/urls.txt
-
+# this is needed to make conda available to the new user
 RUN chown -R $USER:$USER /opt/conda
 USER $USER
 RUN whoami
@@ -35,6 +28,7 @@ RUN git clone https://github.com/forgetso/bindays.git \
     && conda install flask-cors \
     && conda install pandas
 EXPOSE 5000
+ENV PYTHONPATH=$WORKDIR/bindays/backend
 #RUN mkdir -p /home/$USER/.conda && chown -R $USER:$USER .
 #USER $USER
 #WORKDIR $WORKDIR/bindays/backend
