@@ -26,11 +26,9 @@ RUN git clone https://github.com/forgetso/bindays.git \
     && conda install flask \
     && conda install flask-restful \
     && conda install flask-cors \
-    && conda install pandas
-EXPOSE 5000
+    && conda install pandas \
+    && conda install waitress
+EXPOSE 8080
 ENV PYTHONPATH=$WORKDIR/bindays/backend
-#RUN mkdir -p /home/$USER/.conda && chown -R $USER:$USER .
-#USER $USER
-#WORKDIR $WORKDIR/bindays/backend
-#CMD ["echo $(pwd)"]
-#CMD ["conda", "run", "--no-capture-output", "-n", "bindays", "python", "api.py"]
+WORKDIR $WORKDIR/bindays/backend
+CMD ["conda activate bindays && waitress-serve --port=8080 api:app"]
