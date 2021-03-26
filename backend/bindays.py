@@ -1,6 +1,6 @@
 import requests
 import bs4
-from useragents import user_agent_list
+from backend.useragents import user_agent_list
 import random
 from pdf2image import convert_from_path
 from PIL import Image
@@ -10,7 +10,7 @@ import textract
 from pathlib import Path
 import re
 import argparse
-from db import db_connection, bulk_upsert
+from backend.db import db_connection, bulk_upsert
 import datetime
 
 baseuri = "https://www.edinburgh.gov.uk"

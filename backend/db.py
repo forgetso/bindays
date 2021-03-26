@@ -1,5 +1,5 @@
 import pymongo
-from settings import DB_HOST, DB_PORT, DB_NAME, DB_STREETS_COLLECTION
+from backend.settings import DB_HOST, DB_PORT, DB_NAME, DB_STREETS_COLLECTION
 from typing import List, Dict
 import datetime
 from bson.son import SON

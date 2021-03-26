@@ -1,0 +1,8 @@
+version: '3.1'
+
+services:
+  bindays:
+    image: bindays-backend
+    build: ..
+    volumes:
+      - '/home/chris/.ssh:$HOME/.ssh'
