@@ -8,7 +8,7 @@ RUN  apk update && apk add bash vim git \
     && cd $WORKDIR/bindays \
     && cd frontend \
     && yarn install --ignore-engines;
-COPY --chown=node:node .. .
+#COPY --chown=node:node .. .
 EXPOSE 3000
 WORKDIR $WORKDIR/bindays/frontend
 RUN mkdir -p ./node_modules && chown -R $USER:$USER .

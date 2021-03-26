@@ -28,7 +28,13 @@ RUN git clone https://github.com/forgetso/bindays.git \
     && conda install flask-cors \
     && conda install pandas \
     && conda install waitress
-EXPOSE 8080
-ENV PYTHONPATH=$WORKDIR/bindays/backend
-WORKDIR $WORKDIR/bindays/backend
-CMD ["conda activate bindays && waitress-serve --port=8080 api:app"]
+EXPOSE 5000
+ENV PYTHONPATH=$WORKDIR/bindays/backend:$PYTHONPATH
+ENV PATH=/home/$USER/miniconda3/envs/$CONDAENV/bin/:$PATH
+WORKDIR $WORKDIR/$CONDAENV/backend
+RUN echo "source activate $CONDAENV" > /home/$USER/.bashrc
+ENV PATH /opt/conda/envs/$CONDAENV/bin:$PATH
+COPY boot.sh ./
+USER root
+RUN chmod +x boot.sh
+USER $USER
