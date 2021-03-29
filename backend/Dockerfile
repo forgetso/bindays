@@ -38,3 +38,4 @@ COPY boot.sh ./
 USER root
 RUN chmod +x boot.sh
 USER $USER
+CMD ["./boot.sh"]

@@ -1,9 +1,0 @@
-version: '3.1'
-
-services:
-  bindays_frontend:
-    image: bindays_frontend
-    container_name: frontend
-    build: .
-    volumes:
-      - '/home/chris/dev/bindays/.ssh:$HOME/.ssh'

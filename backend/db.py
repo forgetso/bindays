@@ -1,15 +1,16 @@
 import pymongo
-from settings import DB_HOST, DB_PORT, DB_NAME, DB_STREETS_COLLECTION
+from settings import DB_NAME, DB_STREETS_COLLECTION
 from typing import List, Dict
 import datetime
 from bson.son import SON
+import os
 
 
 # Generic Database connection
 
 def db_connection():
-    dbconn = pymongo.MongoClient(host=DB_HOST,
-                                 port=DB_PORT)
+    dbconn = pymongo.MongoClient(host=os.environ['MONGODB_HOST'],
+                                 port=os.environ['MONGODB_PORT'])
     return dbconn
 
 
