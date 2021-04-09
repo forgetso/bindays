@@ -10,6 +10,9 @@ services:
       - frontend
     ports:
       - "3000:3000"
+    volumes:
+      - .:/home/node/bindays
+
 
   mongodb:
     image: mongo
@@ -31,14 +34,14 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    command: waitress-serve --port=5000 api:app
     ports:
       - "5000:5000"
     environment:
       MONGODB_HOST: mongodb
       MONGODB_PORT: 27017
+    command: /bin/bash -c "/home/flask/boot.sh"
     volumes:
-      - appdata:/var/www/
+      - .:/bindays
     depends_on:
       - mongodb
     networks:
@@ -52,6 +55,4 @@ networks:
     driver: bridge
 volumes:
   mongodbdata:
-    driver: local
-  appdata:
     driver: local
