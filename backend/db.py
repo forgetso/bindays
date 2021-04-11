@@ -10,7 +10,10 @@ import os
 
 def db_connection():
     dbconn = pymongo.MongoClient(host=os.environ['MONGODB_HOST'],
-                                 port=int(os.environ['MONGODB_PORT']))
+                                 username=os.environ['MONGODB_USERNAME'],
+                                 password=os.environ['MONGODB_PASSWORD'],
+                                 authSource=DB_NAME,
+                                 )
     return dbconn
 
 

@@ -13,7 +13,7 @@ ReactDOM.render(
         <Router>
             <div className="row">
                 <div className="text-center mx-auto">
-                    <img className="" src="/favicon-64.ico"/>
+                    <img className="" src="favicon.ico"/>
                     <h1 className="m-t-10">
                         <a href="/">Bin Days</a>
                     </h1>

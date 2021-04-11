@@ -6,12 +6,16 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    environment:
+      REACT_APP_API_HOST: localhost
+      REACT_APP_API_PORT: 5000
     networks:
       - frontend
     ports:
       - "3000:3000"
     volumes:
-      - .:/home/node/bindays
+      - ./frontend:/bindays
+      - /bindays/node_modules
 
 
   mongodb:
@@ -22,12 +26,14 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: "admin"
       MONGO_INITDB_ROOT_PASSWORD: "password"
-      MONGO_INITDB_DATABASE: webapp
+      MONGO_INITDB_DATABASE: bindays
       MONGODB_DATA_DIR: /data/db
     volumes:
       - mongodbdata:/data/db
     networks:
       - backend
+    ports:
+      - "27017:27017"
 
   backend:
 
@@ -38,7 +44,8 @@ services:
       - "5000:5000"
     environment:
       MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
+      MONGODB_USERNAME: "apiuser"
+      MONGODB_PASSWORD: "apipassword"
     command: /bin/bash -c "/home/flask/boot.sh"
     volumes:
       - .:/bindays

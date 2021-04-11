@@ -1,17 +1,14 @@
 FROM node:current-alpine3.10
-ENV WORKDIR=/home/node/bindays
+ENV WORKDIR=/bindays
 ENV USER=node
 WORKDIR $WORKDIR
-ADD . /home/$USER/bindays
+COPY . $WORKDIR
 RUN  apk update && apk add bash vim git \
     #&& git clone https://github.com/forgetso/bindays.git \
     && cd $WORKDIR \
-    && echo PWD
-    && cd frontend \
     && yarn install --ignore-engines;
-#COPY --chown=node:node .. .
 EXPOSE 3000
-WORKDIR $WORKDIR/bindays/frontend
+EXPOSE 35729
 RUN mkdir -p ./node_modules && chown -R $USER:$USER .
 USER $USER
 CMD ["yarn", "start"]

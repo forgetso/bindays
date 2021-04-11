@@ -1,5 +1,6 @@
+var baseUrl = "http://" + process.env.REACT_APP_API_HOST + ":" + process.env.REACT_APP_API_PORT
 var searchSteets = function (searchTerm) {
-    return fetch(process.env.REACT_APP_API_URL + 'streets' + '?q=' + searchTerm.toString(),
+    return fetch(baseUrl + '/streets' + '?q=' + searchTerm.toString(),
         {
             method: 'GET',
             headers: {
@@ -14,7 +15,7 @@ var searchSteets = function (searchTerm) {
     });
 };
 var getStreet = function (city, street) {
-    return fetch(process.env.REACT_APP_API_URL + "/street/" + city + "/" + street,
+    return fetch(baseUrl + "/street/" + city + "/" + street,
         {
             method: 'GET',
             headers: {
@@ -30,7 +31,7 @@ var getStreet = function (city, street) {
 };
 
 var getStreetsPaged = function (city, page) {
-    return fetch(process.env.REACT_APP_API_URL + "/streetspaged/" + city + "/" + page,
+    return fetch(baseUrl + "/streetspaged/" + city + "/" + page,
         {
             method: 'GET',
             headers: {
@@ -39,7 +40,7 @@ var getStreetsPaged = function (city, page) {
                 "Access-Control-Allow-Origin": "*"
             }
         }).then((res) => {
-            console.log(res);
+        console.log(res);
         return res.json();
     }).then((data) => {
         return data;

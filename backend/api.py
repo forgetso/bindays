@@ -65,4 +65,4 @@ api.add_resource(Street, '/street/<city>/<street>')
 api.add_resource(StreetsPaged, '/streetspaged/<city>/<page>')
 
 if __name__ == '__main__':
-    app.run(debug=False, host='192.168.1.28')
+    app.run(debug=False, host="0.0.0.0")
