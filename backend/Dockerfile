@@ -1,6 +1,6 @@
 FROM continuumio/miniconda3
 RUN apt update && apt install bash vim git sudo -y
-RUN apt-get install poppler-utils
+RUN apt-get install poppler-utils -y
 # Make RUN commands use `bash --login`:
 ENV USER=flask
 RUN mkdir /home/$USER
