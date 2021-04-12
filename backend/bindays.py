@@ -19,8 +19,10 @@ USER_AGENT = random.choice(user_agent_list)
 LINKSCSV = "binlinks.csv"
 
 
-def main(scrapestreetlinks=None, scrapepdflinks=None, download=None, parse=None):
+def main(scrapestreetlinks=None, scrapepdflinks=None, download=None, parse=None, save=None):
     links = []
+    Path("/img").mkdir(parents=True, exist_ok=True)
+    Path("/pdfs").mkdir(parents=True, exist_ok=True)
     if scrapestreetlinks:
         links = get_bin_links()
     if scrapepdflinks:
@@ -40,6 +42,8 @@ def main(scrapestreetlinks=None, scrapepdflinks=None, download=None, parse=None)
         bintimes = pd.merge(links, times, left_on='filename', right_on='filename', how='right').drop(
             columns=['Unnamed: 0'])
         bintimes.to_csv('bintimes.csv')
+
+    if save:
         bindicts = bintimes.to_dict(orient='records')
         for idx, bindict in enumerate(bindicts):
             bindict['_id'] = bindict['street'] + '_' + datetime.datetime.strftime(bindict['date'], '%Y-%m-%d')
@@ -212,11 +216,15 @@ def setup():
     parser.add_argument(
         "--parse", default=None, action='store_true', help="parse pdfs"
     )
+    parser.add_argument(
+        "--save", default=None, action='store_true', help="save to db"
+    )
     args = parser.parse_args()
     main(scrapestreetlinks=args.scrapestreetlinks,
          scrapepdflinks=args.scrapepdflinks,
          download=args.download,
-         parse=args.parse)
+         parse=args.parse,
+         save=args.save)
 
 
 if __name__ == '__main__':
