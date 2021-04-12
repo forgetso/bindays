@@ -42,6 +42,7 @@ def main(scrapestreetlinks=None, scrapepdflinks=None, download=None, parse=None,
         bintimes.to_csv('bintimes.csv')
 
     if save:
+        bintimes = pd.read_csv('bintimes.csv')
         bindicts = bintimes.to_dict(orient='records')
         for idx, bindict in enumerate(bindicts):
             bindict['_id'] = bindict['street'] + '_' + datetime.datetime.strftime(bindict['date'], '%Y-%m-%d')
