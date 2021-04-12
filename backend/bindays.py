@@ -1,6 +1,6 @@
 import requests
 import bs4
-from backend.useragents import user_agent_list
+from useragents import user_agent_list
 import random
 from pdf2image import convert_from_path
 from PIL import Image
@@ -10,7 +10,7 @@ import textract
 from pathlib import Path
 import re
 import argparse
-from backend.db import db_connection, bulk_upsert
+from db import db_connection, bulk_upsert
 import datetime
 
 baseuri = "https://www.edinburgh.gov.uk"
@@ -20,22 +20,22 @@ LINKSCSV = "binlinks.csv"
 
 
 def main(scrapestreetlinks=None, scrapepdflinks=None, download=None, parse=None):
-    links = None
+    links = []
     if scrapestreetlinks:
         links = get_bin_links()
     if scrapepdflinks:
-        if not links:
+        if not len(links):
             links = pd.read_csv(LINKSCSV)
         links['pdf_url'] = links['uri'].apply(get_collection_pdf_link)
         links.to_csv("binlinks.csv")
     if download:
-        if not links:
+        if not len(links):
             links = pd.read_csv(LINKSCSV)
         get_collection_pdfs(links)
     if parse:
-        if not links:
+        if not len(links):
             links = pd.read_csv(LINKSCSV)
-        links['filename'] = links['pdflink'].str.split("/").str[-1]
+        links['filename'] = links['pdf_url'].str.split("/").str[-1]
         times = parse_pdfs()
         bintimes = pd.merge(links, times, left_on='filename', right_on='filename', how='right').drop(
             columns=['Unnamed: 0'])
@@ -47,7 +47,7 @@ def main(scrapestreetlinks=None, scrapepdflinks=None, download=None, parse=None)
             bindict['city'] = 'Edinburgh'.lower()
             bindicts[idx] = bindict
         print('upserting {} records'.format(len(bindicts)))
-        bulk_upsert(db_connection(), 'frontend', 'days', bindicts)
+        bulk_upsert(db_connection(), 'bindays', 'days', bindicts)
 
 
 def colour_difference(colour1, colour2):
@@ -74,50 +74,51 @@ def parse_pdfs():
     filtercols = ['year', 'month', 'day']
 
     for pdf in sorted(Path("./pdfs").rglob("*.pdf")):
-        print(pdf.absolute())
-        pages = convert_from_path(pdf.absolute(), 100)
-        page = [page for page in pages][0]
-        imgfile = Path('img').joinpath(pdf.name).absolute().with_suffix('.jpg')
-        page.save(imgfile.absolute(), 'JPEG')
+        if 'www' not in pdf.name:
+            print(pdf.absolute())
+            pages = convert_from_path(pdf.absolute(), 100)
+            page = [page for page in pages][0]
+            imgfile = Path('img').joinpath(pdf.name).absolute().with_suffix('.jpg')
+            page.save(imgfile.absolute(), 'JPEG')
 
-        imgpath = Path(imgfile)
-        pdfpath = pdf
-        im = Image.open(imgpath)  # Can be many different formats.
-        pix = im.load()
+            imgpath = Path(imgfile)
+            pdfpath = pdf
+            im = Image.open(imgpath)  # Can be many different formats.
+            pix = im.load()
 
-        rgbs = []
+            rgbs = []
 
-        for col_num, x in cols:
-            for row_num, y in rows:
-                rgbs.append([col_num, row_num, x, y] + list(pix[x, y]))
-        df = pd.DataFrame(rgbs, columns=['col_num', 'row_num', 'x', 'y', 'r', 'g', 'b'])
+            for col_num, x in cols:
+                for row_num, y in rows:
+                    rgbs.append([col_num, row_num, x, y] + list(pix[x, y]))
+            df = pd.DataFrame(rgbs, columns=['col_num', 'row_num', 'x', 'y', 'r', 'g', 'b'])
 
-        df = df.groupby(['col_num', 'row_num']).mean().reset_index()
-        for name, item in colours.items():
-            colour = item['rgb']
-            df[name] = df.apply(lambda x: colour_difference([x['r'], x['g'], x['b']], colour), axis=1)
+            df = df.groupby(['col_num', 'row_num']).mean().reset_index()
+            for name, item in colours.items():
+                colour = item['rgb']
+                df[name] = df.apply(lambda x: colour_difference([x['r'], x['g'], x['b']], colour), axis=1)
 
-        df['colour'] = df[['blue', 'green', 'yellow', 'red']].idxmin(axis=1)
-        df['colour'] = np.where((df[['r', 'g', 'b']].mean(axis=1) > 250), 'white', df['colour'])
-        df = df.sort_values(['row_num', 'col_num'])
+            df['colour'] = df[['blue', 'green', 'yellow', 'red']].idxmin(axis=1)
+            df['colour'] = np.where((df[['r', 'g', 'b']].mean(axis=1) > 250), 'white', df['colour'])
+            df = df.sort_values(['row_num', 'col_num'])
 
-        # attach pdf text
-        view = textract.process(pdfpath).decode('utf8')
-        dates = [x for x in re.split(dateregex, view)[1].split("\n") if re.match(numberregex, x)]
-        dates = dates[:(df['colour'] != 'white').sum()]
-        dates = pd.DataFrame(dates, columns=['day'])
-        final = pd.concat([dates, df[df['colour'] != 'white'][['col_num', 'colour']].reset_index(drop=True)],
-                          axis=1).rename({'col_num': 'month'}, axis=1)
-        final['day'] = final['day'].astype(int)
-        final['filename'] = imgpath.stem
-        final['year'] = re.search(dateregex, view)[0][-4:]
+            # attach pdf text
+            view = textract.process(pdfpath).decode('utf8')
+            dates = [x for x in re.split(dateregex, view)[1].split("\n") if re.match(numberregex, x)]
+            dates = dates[:(df['colour'] != 'white').sum()]
+            dates = pd.DataFrame(dates, columns=['day'])
+            final = pd.concat([dates, df[df['colour'] != 'white'][['col_num', 'colour']].reset_index(drop=True)],
+                              axis=1).rename({'col_num': 'month'}, axis=1)
+            final['day'] = final['day'].astype(int)
+            final['filename'] = imgpath.stem
+            final['year'] = re.search(dateregex, view)[0][-4:]
 
-        final = final[['filename', 'year', 'month', 'day', 'colour']]
-        final['date'] = final[filtercols].apply(lambda x: '-'.join(x.values.astype(str)), axis="columns")
-        final['date'] = pd.to_datetime(final['date'])
-        final['bins'] = final['colour'].apply(lambda x: colours[x]['bins'])
-        final.drop(columns=['year', 'month', 'day', 'colour'], inplace=True)
-        all = pd.concat([all, final])
+            final = final[['filename', 'year', 'month', 'day', 'colour']]
+            final['date'] = final[filtercols].apply(lambda x: '-'.join(x.values.astype(str)), axis="columns")
+            final['date'] = pd.to_datetime(final['date'])
+            final['bins'] = final['colour'].apply(lambda x: colours[x]['bins'])
+            final.drop(columns=['year', 'month', 'day', 'colour'], inplace=True)
+            all = pd.concat([all, final])
     all.to_csv("all_bin_days.csv")
     return all
 
@@ -144,7 +145,7 @@ def get_collection_pdfs(links):
     headers = {'User-Agent': USER_AGENT}
     session = requests.Session()
     session.get(url='https://www.edinburgh.gov.uk/bins-recycling', headers=headers)
-    for pdf_link in links['pdflink'].value_counts().index:
+    for pdf_link in links['pdf_url'].value_counts().index:
         url = pdf_link
         if url not in (None, 'None'):
             pdf = session.get(url)
