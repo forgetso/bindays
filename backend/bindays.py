@@ -21,8 +21,8 @@ LINKSCSV = "binlinks.csv"
 
 def main(scrapestreetlinks=None, scrapepdflinks=None, download=None, parse=None, save=None):
     links = []
-    Path("/img").mkdir(parents=True, exist_ok=True)
-    Path("/pdfs").mkdir(parents=True, exist_ok=True)
+    Path("./img").mkdir(parents=True, exist_ok=True)
+    Path("./pdfs").mkdir(parents=True, exist_ok=True)
     if scrapestreetlinks:
         links = get_bin_links()
     if scrapepdflinks:

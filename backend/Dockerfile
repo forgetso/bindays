@@ -17,13 +17,17 @@ SHELL ["/bin/bash", "--login", "-c"]
 
 RUN conda init bash \
     && conda create -n $CONDAENV python=3.8 \
-    && conda activate $CONDAENV \
+RUN conda activate $CONDAENV \
     && conda install pymongo \
     && conda install flask \
     && conda install flask-restful \
     && conda install flask-cors \
     && conda install pandas \
-    && conda install waitress
+    && conda install waitress \
+    && conda install requests \
+    && conda install bs4 \
+    && pip install textract \
+    && pip install pdf2image
 ENV PATH /home/$USER/miniconda3/envs/$CONDAENV/bin/:$PATH
 ENV PATH /opt/conda/envs/$CONDAENV/bin:$PATH
 COPY ./boot.sh /home/flask/boot.sh
