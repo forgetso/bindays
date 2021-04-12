@@ -92,5 +92,4 @@ yarn-error.log*
 *.xcf
 .ipynb_checkpoints
 
-*.jpeg
 *.pdf
