@@ -45,7 +45,10 @@ def main(scrapestreetlinks=None, scrapepdflinks=None, download=None, parse=None,
         bintimes = pd.read_csv('bintimes.csv')
         bindicts = bintimes.to_dict(orient='records')
         for idx, bindict in enumerate(bindicts):
-            bindict['_id'] = bindict['street'] + '_' + datetime.datetime.strftime(bindict['date'], '%Y-%m-%d')
+            datestr = bindict['date']
+            if not isinstance(datestr, str):
+                datestr = datetime.datetime.strftime(bindict['date'], '%Y-%m-%d')
+            bindict['_id'] = bindict['street'] + '_' + datestr
             bindict['_id'] = bindict['_id'].replace(' ', '_').lower()
             bindict['city'] = 'Edinburgh'.lower()
             bindicts[idx] = bindict
