@@ -14,7 +14,7 @@ RUN whoami
 RUN sh -c 'touch /home/$USER/.bashrc'
 SHELL ["/bin/bash", "--login", "-c"]
 
-RUN apt-get install poppler-utils
+RUN apt-get install poppler-utils \
     && conda init bash \
     && conda create -n $CONDAENV python=3.8 \
     && conda activate $CONDAENV \
