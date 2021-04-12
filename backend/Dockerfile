@@ -1,5 +1,6 @@
 FROM continuumio/miniconda3
 RUN apt update && apt install bash vim git sudo -y
+RUN apt-get install poppler-utils
 # Make RUN commands use `bash --login`:
 ENV USER=flask
 RUN mkdir /home/$USER
@@ -14,8 +15,7 @@ RUN whoami
 RUN sh -c 'touch /home/$USER/.bashrc'
 SHELL ["/bin/bash", "--login", "-c"]
 
-RUN apt-get install poppler-utils \
-    && conda init bash \
+RUN conda init bash \
     && conda create -n $CONDAENV python=3.8 \
     && conda activate $CONDAENV \
     && conda install pymongo \
