@@ -17,7 +17,7 @@ SHELL ["/bin/bash", "--login", "-c"]
 
 RUN conda init bash \
     && conda create -n $CONDAENV python=3.8 \
-RUN conda activate $CONDAENV \
+    && conda activate $CONDAENV \
     && conda install pymongo \
     && conda install flask \
     && conda install flask-restful \

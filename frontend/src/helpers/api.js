@@ -1,4 +1,4 @@
-var baseUrl = "http://" + process.env.REACT_APP_API_HOST + ":" + process.env.REACT_APP_API_PORT
+var baseUrl = process.env.NODE_ENV === 'production' ? 'https://bindays.uk/api' : "http://" + process.env.REACT_APP_API_HOST + ":" + process.env.REACT_APP_API_PORT
 var searchSteets = function (searchTerm) {
     return fetch(baseUrl + '/streets' + '?q=' + searchTerm.toString(),
         {

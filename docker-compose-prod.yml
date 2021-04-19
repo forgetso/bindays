@@ -1,0 +1,65 @@
+version: '3.1'
+
+services:
+  frontend:
+    tty: true
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-prod
+    environment:
+      REACT_APP_API_HOST: backend
+      REACT_APP_API_PORT: 5000
+    networks:
+      - frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/bindays
+      - /bindays/node_modules
+
+
+  mongodb:
+    image: mongo
+    container_name: mongo_db
+    restart: unless-stopped
+    command: mongod
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "admin"
+      MONGO_INITDB_ROOT_PASSWORD: "password"
+      MONGO_INITDB_DATABASE: bindays
+      MONGODB_DATA_DIR: /data/db
+    volumes:
+      - mongodbdata:/data/db
+    networks:
+      - backend
+    ports:
+      - "27017:27017"
+
+  backend:
+
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      MONGODB_HOST: mongodb
+      MONGODB_USERNAME: "apiuser"
+      MONGODB_PASSWORD: "apipassword"
+    command: /bin/bash -c "/home/flask/boot.sh"
+    volumes:
+      - .:/bindays
+    depends_on:
+      - mongodb
+    networks:
+      - frontend
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+volumes:
+  mongodbdata:
+    driver: local
