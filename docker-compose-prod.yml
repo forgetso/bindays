@@ -2,6 +2,7 @@ version: '3.1'
 
 services:
   frontend:
+    hostname: frontend
     tty: true
     build:
       context: ./frontend
@@ -19,6 +20,7 @@ services:
 
 
   mongodb:
+    hostname: mongodb
     image: mongo
     container_name: mongo_db
     restart: unless-stopped
@@ -36,7 +38,7 @@ services:
       - "27017:27017"
 
   backend:
-
+    hostname: backend
     build:
       context: ./backend
       dockerfile: Dockerfile
