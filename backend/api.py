@@ -60,9 +60,9 @@ def json_serial(obj):
 ##
 ## Actually setup the Api resource routing here
 ##
-api.add_resource(SearchStreets, '/streets')
-api.add_resource(Street, '/street/<city>/<street>')
-api.add_resource(StreetsPaged, '/streetspaged/<city>/<page>')
+api.add_resource(SearchStreets, '/api/streets')
+api.add_resource(Street, '/api/street/<city>/<street>')
+api.add_resource(StreetsPaged, '/api/streetspaged/<city>/<page>')
 
 if __name__ == '__main__':
     app.run(debug=False, host="0.0.0.0")
