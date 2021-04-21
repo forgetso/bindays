@@ -13,7 +13,8 @@ services:
     networks:
       - frontend
     ports:
-      - "3000:80"
+      - "80:80"
+      - "443:443"
     volumes:
       - ./frontend:/bindays
       - /bindays/node_modules
