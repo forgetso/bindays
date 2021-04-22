@@ -4,7 +4,7 @@ from typing import List, Dict
 import datetime
 from bson.son import SON
 import os
-
+import re
 
 # Generic Database connection
 
@@ -37,6 +37,7 @@ def search_streets(conn, term):
     today = todays_date()
     future_date = today + datetime.timedelta(days=8)
     search_term = f'.*{term}.*'.replace(" ", "_")
+    search_term = re.sub('\d+\s*','', search_term)
     collection = conn[DB_NAME][DB_STREETS_COLLECTION]
     results = collection.aggregate(
         [
