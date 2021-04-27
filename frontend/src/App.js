@@ -57,8 +57,9 @@ class SearchBox extends React.Component {
         const theTime = Date.now();
         let timeDiff = theTime - this.state.lastSearchTime;
 
+        const searchTermStripped = searchTerm.replace(searchTerm.match(/^[0-9]+\s*/), "");
 
-        if (searchTerm.length > 4 && timeDiff > 500) {
+        if (searchTermStripped.length > 4 && timeDiff > 500) {
             console.log('searching after ' + timeDiff + 'ms');
             api.searchSteets(searchTerm).then((resp) => {
                 console.log(resp);
