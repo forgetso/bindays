@@ -61,11 +61,11 @@ class SearchBox extends React.Component {
 
         if (searchTermStripped.length > 4 && timeDiff > 500) {
             console.log('searching after ' + timeDiff + 'ms');
+            this.setState({lastSearchTime: Date.now()});
             api.searchSteets(searchTerm).then((resp) => {
                 console.log(resp);
                 this.setState({
                     streets: resp,
-                    lastSearchTime: theTime,
                     searchTerm: searchTerm
                 });
 
