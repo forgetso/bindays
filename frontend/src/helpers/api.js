@@ -1,4 +1,6 @@
-var baseUrl = process.env.NODE_ENV === 'production' ? 'http://bindays.uk/api' : "http://" + process.env.REACT_APP_API_HOST + ":" + process.env.REACT_APP_API_PORT
+var productionBaseUrl = window.location.protocol + '//bindays.uk/api';
+var localBaseUrl = window.location.protocol + "//" + process.env.REACT_APP_API_HOST + ":" + process.env.REACT_APP_API_PORT + '/api';
+var baseUrl = process.env.NODE_ENV === 'production' ? productionBaseUrl : localBaseUrl;
 var searchSteets = function (searchTerm) {
     return fetch(baseUrl + '/streets' + '?q=' + searchTerm.toString(),
         {
