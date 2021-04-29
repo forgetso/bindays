@@ -1,8 +1,8 @@
-var productionBaseUrl = window.location.protocol + '//bindays.uk/api';
-var localBaseUrl = window.location.protocol + "//" + process.env.REACT_APP_API_HOST + ":" + process.env.REACT_APP_API_PORT + '/api';
-var baseUrl = process.env.NODE_ENV === 'production' ? productionBaseUrl : localBaseUrl;
-var searchSteets = function (searchTerm) {
-    return fetch(baseUrl + '/streets' + '?q=' + searchTerm.toString(),
+const productionBaseUrl = `${window.location.protocol}//bindays.uk/api`;
+const localBaseUrl = `${window.location.protocol}//${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}/api`;
+const baseUrl = process.env.NODE_ENV === 'production' ? productionBaseUrl : localBaseUrl;
+const searchSteets = function (searchTerm) {
+    return fetch(`${baseUrl}/streets?q=${searchTerm.toString()}`,
         {
             method: 'GET',
             headers: {
@@ -16,8 +16,8 @@ var searchSteets = function (searchTerm) {
         return data;
     });
 };
-var getStreet = function (city, street) {
-    return fetch(baseUrl + "/street/" + city + "/" + street,
+const getStreet = function (city, street) {
+    return fetch(`${baseUrl}/street/${city}/${street}`,
         {
             method: 'GET',
             headers: {
@@ -32,8 +32,8 @@ var getStreet = function (city, street) {
     });
 };
 
-var getStreetsPaged = function (city, page) {
-    return fetch(baseUrl + "/streetspaged/" + city + "/" + page,
+const getStreetsPaged = function (city, page) {
+    return fetch(`${baseUrl}/streetspaged/${city}/${page}`,
         {
             method: 'GET',
             headers: {
@@ -42,7 +42,6 @@ var getStreetsPaged = function (city, page) {
                 "Access-Control-Allow-Origin": "*"
             }
         }).then((res) => {
-        console.log(res);
         return res.json();
     }).then((data) => {
         return data;

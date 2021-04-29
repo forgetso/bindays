@@ -15,7 +15,9 @@ ReactDOM.render(
                 <div className="text-center mx-auto">
                     <img className="icon" src="/favicon.ico"/>
                     <h1 className="m-t-10">
-                        <a href="/">Bin Days</a>
+                        <a href="/">
+                            Bin Days
+                        </a>
                     </h1>
                 </div>
             </div>

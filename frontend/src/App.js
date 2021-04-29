@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import * as api from "./helpers/api.js"
 import StreetList from "./components/StreetList"
@@ -59,13 +58,14 @@ class SearchBox extends React.Component {
 
         const searchTermStripped = searchTerm.replace(searchTerm.match(/^[0-9]+\s*/), "");
 
-        if (searchTermStripped.length > 4 && timeDiff > 500) {
-            console.log('searching after ' + timeDiff + 'ms');
+        if (searchTermStripped.length > 4 && timeDiff > 300) {
             this.setState({lastSearchTime: Date.now()});
+
             api.searchSteets(searchTerm).then((resp) => {
-                console.log(resp);
+                let sortedResp = resp.sort((a, b) => (a._id > b._id) ? 1 : -1);
+                console.log(sortedResp);
                 this.setState({
-                    streets: resp,
+                    streets: sortedResp,
                     searchTerm: searchTerm
                 });
 

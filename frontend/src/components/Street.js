@@ -23,13 +23,12 @@ class Street extends React.Component {
                     showInput: true,
                     days: resp
                 });
-                console.log(resp);
             }
         })
     }
 
     capitalizeName = function (name) {
-        return name.replace(/\b(\w)/g, s => s.toUpperCase());
+        return name.replace(/\b(\w)/g, s => s.toUpperCase()).replace("'S", "'s");
     };
 
 
