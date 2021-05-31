@@ -2,6 +2,10 @@
 
 Source code for the website [bindays](https://bindays.uk) which shows the bin days for Edinburgh, Scotland.
 
-The website is a React app frontend with a backend written in python, running a flask API. The data is stored in Mongo DB. All three services are run in docker containers.
+The website runs in 3 docker containers:
+
+1. React app frontend with nginx server
+2. Python backend, running a flask API
+3. Mongo DB
 
 All data is scraped from the Edinburgh City Council bin schedule PDFs.
